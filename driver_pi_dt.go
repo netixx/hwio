@@ -21,6 +21,7 @@ import (
 )
 
 type pinoutRevision int
+
 const (
 	//type0ne is used for a Raspberry 1
 	type0ne = iota
@@ -29,7 +30,6 @@ const (
 	//typeAplusBPlusZeroPi2 is used fo  Raspberry Pi 1 Models A+ and B+, Pi 2 Model B, Pi 3 Model B and Pi Zero (and Zero W)
 	typeAplusBPlusZeroPi2
 )
-
 
 type RaspberryPiDTDriver struct { // all pins understood by the driver
 	pinConfigs []*DTPinConfig
@@ -227,7 +227,7 @@ func (d *RaspberryPiDTDriver) getI2COptions() map[string]interface{} {
 
 	result["pins"] = pins
 
-	if d.BoardRevision() ==  type0ne {
+	if d.BoardRevision() == type0ne {
 		result["device"] = "/dev/i2c-0"
 	} else {
 		result["device"] = "/dev/i2c-1"
@@ -263,7 +263,7 @@ func (d *RaspberryPiDTDriver) BoardRevision() pinoutRevision {
 	// Pi 2 boards have different strings, but pinout is the same as B+
 	revision = CpuInfo(0, "CPU revision")
 	switch revision {
-	case "5":
+	case "5", "4":
 		return typeAplusBPlusZeroPi2
 	case "7": //PI zero +
 		return typeAplusBPlusZeroPi2
